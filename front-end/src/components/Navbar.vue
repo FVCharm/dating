@@ -32,7 +32,7 @@
             <a class="nav-link disabled" href="#"><i class="el-icon-message"></i></a>
           </li>
           <li class="nav-item">
-            <router-link to="/profile" class="nav-link">详情</router-link>
+            <router-link v-bind:to="{ name: 'Profile', params: { id: sharedState.user_id }}" class="nav-link">Profile</router-link>
           </li>
           <li class="nav-item">
             <a v-on:click="logout" class="nav-link" href="#"></a>

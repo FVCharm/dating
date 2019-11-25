@@ -38,8 +38,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-import store from '../store'
 
 export default {
   name: 'Register',
@@ -133,10 +131,9 @@ export default {
             phone: this.registerForm.phone,
             password: this.registerForm.pass
           }
-          axios.post(path, payload)
+          this.$axios.post(path, payload)
             .then((response) => {
               // 注册成功
-              store.setNewAction()
               this.$router.push('/login')
             })
             .catch((error) => {

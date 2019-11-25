@@ -39,9 +39,12 @@ const routes = [
     component: Register
   },
   {
-    path: '/profile',
+    path: '/user/:id',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    meta: {
+      requiresAuth: true
+    }
   }
 ]
 

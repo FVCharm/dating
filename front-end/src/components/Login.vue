@@ -104,7 +104,6 @@
 <script>
 import Alert from './Alert'
 import store from '../store'
-import axios from 'axios'
 export default {
   name: 'login',
   components: {
@@ -146,14 +145,13 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           const path = 'http://localhost:5000/v1/tokens'
-          axios.post(path, {}, {
+          this.$axios.post(path, {}, {
             auth: {
               'username': this.loginForm.phone.toString(),
               'password': this.loginForm.pass
             }
           }).then((response) => {
             window.localStorage.setItem('dating-token', response.data.token)
-            store.resetNotNewAction()
             store.loginAction()
 
             if (typeof this.$route.query.redirect === 'undefined') {
