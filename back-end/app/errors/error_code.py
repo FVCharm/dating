@@ -9,6 +9,7 @@ class Success(APIException):
 
 class DeleteSuccess(Success):
     code = 202
+    msg = 'ok'
     error_code = 1
 
 
@@ -34,6 +35,18 @@ class NotFound(APIException):
     code = 404
     msg = 'the resource are not found O__O...'
     error_code = 1001
+
+
+class BusinessLimit(APIException):
+    code = 403
+    msg = '短信发送频率太快 O__O...'
+    error_code = 1002
+
+
+class PhoneError(APIException):
+    code = 400
+    msg = '无效的手机号 O__O...'
+    error_code = 1003
 
 
 class AuthFailed(APIException):

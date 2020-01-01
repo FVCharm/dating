@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "092f6e787224f70beaf070214de04b4dbd780cd572a619f9f2deb3efe2343173"
+            "sha256": "906e91ce8ff64a28e0a315c5d909fff1ed35eb0e018c5dfe4ca0fa4142b23d26"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,9 +18,22 @@
     "default": {
         "alembic": {
             "hashes": [
-                "sha256:49277bb7242192bbb9eac58fed4fe02ec6c3a2a4b4345d2171197459266482b2"
+                "sha256:3b0cb1948833e062f4048992fbc97ecfaaaac24aaa0d83a1202a99fb58af8c6d"
             ],
-            "version": "==1.3.1"
+            "version": "==1.3.2"
+        },
+        "aliyun-python-sdk-core-v3": {
+            "hashes": [
+                "sha256:43228af216096b876b88abaf756bc9b9264663a83b620d22e902b2c269a1ab05"
+            ],
+            "index": "pypi",
+            "version": "==2.13.11"
+        },
+        "blinker": {
+            "hashes": [
+                "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"
+            ],
+            "version": "==1.4"
         },
         "click": {
             "hashes": [
@@ -52,6 +65,13 @@
             ],
             "index": "pypi",
             "version": "==3.3.0"
+        },
+        "flask-mail": {
+            "hashes": [
+                "sha256:22e5eb9a940bf407bcf30410ecc3708f3c56cc44b29c34e1726fe85006935f41"
+            ],
+            "index": "pypi",
+            "version": "==0.9.1"
         },
         "flask-migrate": {
             "hashes": [
@@ -90,6 +110,13 @@
                 "sha256:9fe95f19286cfefaa917656583d020be14e7859c6b0252588391e47db34527de"
             ],
             "version": "==2.10.3"
+        },
+        "jmespath": {
+            "hashes": [
+                "sha256:3720a4b1bd659dd2eecad0666459b9788813e032b83e7ba58578e48254e0a0e6",
+                "sha256:bde2aef6f44302dfb30320115b17d030798de8c4110e28d5cf6cf91a7a31074c"
+            ],
+            "version": "==0.9.4"
         },
         "mako": {
             "hashes": [
@@ -170,9 +197,9 @@
         },
         "sqlalchemy": {
             "hashes": [
-                "sha256:afa5541e9dea8ad0014251bc9d56171ca3d8b130c9627c6cb3681cff30be3f8a"
+                "sha256:bfb8f464a5000b567ac1d350b9090cf081180ec1ab4aa87e7bca12dab25320ec"
             ],
-            "version": "==1.3.11"
+            "version": "==1.3.12"
         },
         "werkzeug": {
             "hashes": [

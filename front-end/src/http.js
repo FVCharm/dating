@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 
 axios.defaults.timeout = 5000 // 超时时间
-axios.defaults.baseURL = 'http://localhost:5000/api'
+axios.defaults.baseURL = 'http://localhost:5001/v1'
 
 axios.interceptors.request.use(function (config) {
   // Do something before request is sent

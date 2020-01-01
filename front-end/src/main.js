@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import 'bootstrap-material-design/dist/css/bootstrap-material-design.css'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import 'element-ui/lib/theme/index.css'
 import axios from './http'
 
 Vue.config.productionTip = false

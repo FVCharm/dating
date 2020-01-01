@@ -1,11 +1,6 @@
 <template>
   <el-container>
     <el-main>
-      <alert
-        v-if="sharedState.is_new"
-        v-bind:variant="alertVariant"
-        v-bind:message="alertMessage">
-      </alert>
       <section class="loginSection">
         <el-row>
           <el-col
@@ -44,7 +39,7 @@
                         <router-link
                           :underline="false"
                           tag="el-link"
-                          to="/register"
+                          v-bind:to="{ name: 'ResetPasswordRequest' }"
                           type="primary"
                           >忘记密码？</router-link
                         >
@@ -102,13 +97,9 @@
 </template>
 
 <script>
-import Alert from './Alert'
 import store from '../store'
 export default {
   name: 'login',
-  components: {
-    alert: Alert
-  },
   data () {
     var checkPhone = (rule, value, callback) => {
       if (!value) {
@@ -128,8 +119,6 @@ export default {
     }
     return {
       sharedState: store.state,
-      alertVariant: 'info',
-      alertMessage: '恭喜注册成功！',
       loginForm: {
         phone: '',
         pass: ''
@@ -144,7 +133,7 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          const path = 'http://localhost:5000/v1/tokens'
+          const path = '/tokens'
           this.$axios.post(path, {}, {
             auth: {
               'username': this.loginForm.phone.toString(),
@@ -154,16 +143,31 @@ export default {
             window.localStorage.setItem('dating-token', response.data.token)
             store.loginAction()
 
+            console.log(JSON.parse(atob(window.localStorage.getItem('dating-token').split('.')[1])))
             if (typeof this.$route.query.redirect === 'undefined') {
               this.$router.push('/')
+              this.$message({
+                showClose: true,
+                message: '登录成功，欢迎您！',
+                type: 'success',
+                center: true
+              })
             } else {
               this.$router.push(this.$route.query.redirect)
             }
           }).catch((error) => {
             // eslint-disable-next-line eqeqeq
             console.log(error.response)
+            if (error.response.data.error_code === 1005) {
+              this.$message({
+                showClose: true,
+                message: '手机密码错误，请确认后登录',
+                type: 'warning',
+                duration: 5000,
+                center: true
+              })
+            }
           })
-          alert('登录提交成功！')
         } else {
           console.log('提交失败！！')
           return false

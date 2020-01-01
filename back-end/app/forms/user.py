@@ -9,7 +9,7 @@ from app.forms.base import BaseForm
 class RegisterForm(BaseForm):
     name = StringField('昵称', validators=[DataRequired(message='昵称不能为空'), Length(2, 10, message='昵称长度为2~10个字符')])
     phone = IntegerField('手机号', validators=[
-        DataRequired(message='不允许为空'),
+        DataRequired(message='手机号不能为空'),
         NumberRange(min=10000000000, max=99999999999)])
     password = PasswordField('密码', validators=[
         DataRequired(message='密码不能为空'),
@@ -22,7 +22,7 @@ class RegisterForm(BaseForm):
 
 class LoginForm(BaseForm):
     phone = IntegerField('手机号', validators=[
-        DataRequired(message='不允许为空'),
+        DataRequired(message='手机号不允许为空'),
         NumberRange(min=10000000000, max=99999999999)])
     password = PasswordField('密码', validators=[
         DataRequired(message='密码不能为空'),

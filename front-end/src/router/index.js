@@ -6,6 +6,10 @@ import Home from '../components/Home'
 import Login from '../components/Login'
 import Register from '../components/Register'
 import Profile from '../components/Profile'
+import Edit from '../components/Edit'
+import EditProfile from '../components/EditProfile'
+import ResetPasswordRequest from '@/components/ResetPasswordRequest'
+import ResetPassword from '@/components/ResetPassword'
 
 Vue.use(VueRouter)
 
@@ -45,6 +49,33 @@ const routes = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: '/edit',
+    name: 'Edit',
+    component: Edit,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    // 用户修改自己的个人信息
+    path: '/edit-profile',
+    name: 'EditProfile',
+    component: EditProfile,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/reset-password-request',
+    name: 'ResetPasswordRequest',
+    component: ResetPasswordRequest
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPassword',
+    component: ResetPassword
   }
 ]
 
