@@ -15,6 +15,7 @@ class User(Base):
     id = db.Column(db.Integer, primary_key=True)
     phone = db.Column(db.String(24), unique=True, nullable=False)
     _password = db.Column('password', db.String(128))
+    email = db.Column(db.String(120), index=True, unique=True)
 
     name = db.Column('姓名', db.String(12))
     ethnic_group = db.Column('民族', db.String(12))
@@ -104,6 +105,7 @@ class User(Base):
         data = {
             'id': self.id,
             'name': self.username,
+            'phone': self.phone,
             '_links': {
                 'self': url_for('api.get_user', id=self.id)
             },

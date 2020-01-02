@@ -583,6 +583,38 @@
               </el-row>
             </section>
           </el-tab-pane>
+          <el-tab-pane label="账号安全">
+            <section>
+              <el-row>
+                <el-col :offset="1" :span="22">
+                  <el-card>
+                    <div slot="header" style="text-align:center">个人设置</div>
+                    <h4>谁可以看我的资料</h4>
+                    <div>
+                      <el-radio border label="1" v-model="radio">所有人</el-radio>
+                      <el-radio border label="2" v-model="radio">只有认证用户</el-radio>
+                      <el-radio border label="3" v-model="radio">符合择偶条件的认证用户</el-radio>
+                    </div>
+                    <el-divider></el-divider>
+                    <h4>谁可以查看我的联系方式</h4>
+                    <div>
+                      <el-radio border label="1" v-model="radio1">所有人</el-radio>
+                      <el-radio border label="2" v-model="radio1">只有认证用户</el-radio>
+                      <el-radio border label="3" v-model="radio1">符合择偶条件的认证用户</el-radio>
+                    </div>
+                    <el-divider></el-divider>
+                    <h4>我的恋爱状态</h4>
+                    <div>
+                      <el-radio border label="1" v-model="radio2">寻觅中</el-radio>
+                      <el-radio border label="2" v-model="radio2">约会中</el-radio>
+                      <el-radio border label="3" v-model="radio2">热恋中</el-radio>
+                      <el-radio border label="4" v-model="radio2">我结婚啦</el-radio>
+                    </div>
+                  </el-card>
+                </el-col>
+              </el-row>
+            </section>
+          </el-tab-pane>
           <el-tab-pane label="账号设置">
             <section>
               <el-row>
@@ -607,16 +639,18 @@
                         ref="passwordForm"
                         style="margin: 16px 0;"
                         v-if="activeStep === 0"
+                        :rules="rules"
                       >
                         <el-form-item label="手机号" style="margin-top: 20px;">
-                          138********
-                          <el-button :style="{ marginLeft: '20px' }">发送验证码</el-button>
+                          {{passwordForm.phone.substring(0, 3) + "****" + passwordForm.phone.substring(passwordForm.phone.length-4, passwordForm.phone.length)}}
+                          <el-button v-model.number="passwordForm.phone" @click="sendCode(passwordForm)" :style="{ marginLeft: '20px' }">发送验证码</el-button>
                         </el-form-item>
-                        <el-form-item label="验证码">
-                          <el-input v-model="passwordForm.code"></el-input>
+                        <el-form-item label="验证码" prop="verCode">
+                          <el-input v-model.number="passwordForm.verCode"></el-input>
                         </el-form-item>
                         <div align="center">
-                          <el-button @click="nextStep" style="margin-top: 12px;">下一步</el-button>
+                          <el-button @click="nextStep1('passwordForm')" style="margin-top: 12px;">下一步</el-button>
+
                         </div>
                       </el-form>
                       <el-form
@@ -625,15 +659,16 @@
                         ref="passwordForm"
                         style="margin: 16px 0;"
                         v-else-if="activeStep === 1"
+                        :rules="rules"
                       >
-                        <el-form-item label="新密码" style="margin-top: 20px;">
+                        <el-form-item label="新密码" style="margin-top: 20px;" prop="newPassword">
                           <el-input v-model="passwordForm.newPassword"></el-input>
                         </el-form-item>
-                        <el-form-item label="确认密码">
+                        <el-form-item label="确认密码" prop="newPassword2">
                           <el-input v-model="passwordForm.newPassword2"></el-input>
                         </el-form-item>
                         <div align="center">
-                          <el-button @click="nextStep" style="margin-top: 12px;">下一步</el-button>
+                          <el-button @click="nextStep2('passwordForm')" style="margin-top: 12px;">下一步</el-button>
                         </div>
                       </el-form>
                       <el-form :model="passwordForm" label-width="100px" ref="passwordForm" v-else>
@@ -645,7 +680,7 @@
                           type="success"
                         ></el-alert>
                         <div align="center">
-                          <el-button @click="nextStep" style="margin-top: 12px;">完成</el-button>
+                          <el-button @click="nextStep3" style="margin-top: 12px;">完成</el-button>
                         </div>
                       </el-form>
                     </el-row>
@@ -666,6 +701,41 @@ import store from '../store'
 export default {
   name: 'Edit',
   data () {
+    var checkCode = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('验证码不能为空'))
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error('请输入数字'))
+        } else {
+          if (value !== this.passwordForm.code) {
+            callback(new Error('请输入正确的验证码'))
+          } else {
+            callback()
+          }
+        }
+      }, 1000)
+    }
+    var checkPass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.passwordForm.newPassword2 !== '') {
+          this.$refs.passwordForm.validateField('newPassword2')
+        }
+        callback()
+      }
+    }
+    var checkPass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.passwordForm.newPassword) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       sharedState: store.state,
       activeStep: 0,
@@ -719,6 +789,7 @@ export default {
       },
       passwordForm: {
         phone: '',
+        verCode: '',
         code: '',
         newPassword: '',
         newPassword2: ''
@@ -774,7 +845,19 @@ export default {
           value: '博士',
           label: '博士'
         }
-      ]
+      ],
+      rules: {
+        newPassword: [
+          { validator: checkPass, trigger: 'blur' }
+          // { min: 6, message: '密码长度至少为6位', trigger: 'blur' }
+        ],
+        newPassword2: [
+          { validator: checkPass2, trigger: 'blur' }
+        ],
+        verCode: [
+          { validator: checkCode, trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
@@ -783,6 +866,7 @@ export default {
       this.$axios.get(path)
         .then((response) => {
           this.personalForm.username = response.data.name
+          this.passwordForm.phone = response.data.phone
           console.log(this.personalForm.username)
         })
         .catch((error) => {
@@ -844,6 +928,55 @@ export default {
           console.log(error.response.data)
         })
     },
+    sendCode (formName) {
+      // eslint-disable-next-line standard/object-curly-even-spacing
+      const path = 'http://localhost:5001/v1/verify'
+      const payload = {
+        phone: Number(this.passwordForm.phone)
+      }
+      this.$axios.post(path, payload)
+        .then((response) => {
+          console.log(response.data)
+          if (response.data.error_code === 0) {
+            this.passwordForm.code = response.data.code
+            this.$message({
+              showClose: true,
+              message: '短信已发送，请注意查收',
+              type: 'info',
+              duration: 5000,
+              center: true
+            })
+          }
+        })
+        .catch((error) => {
+          console.log(error.response)
+          if (error.response.data.error_code === 1002) {
+            this.$message({
+              showClose: true,
+              message: '短信发送过于频繁，请稍后再试',
+              type: 'warning',
+              duration: 5000,
+              center: true
+            })
+          } else if (error.response.data.error_code === 1003) {
+            this.$message({
+              showClose: true,
+              message: '该手机号不存在，请输入正确的手机号',
+              type: 'warning',
+              duration: 5000,
+              center: true
+            })
+          } else if (error.response.data.error_code === 999) {
+            this.$message({
+              showClose: true,
+              message: '短信功能异常，请联系客服',
+              type: 'warning',
+              duration: 5000,
+              center: true
+            })
+          }
+        })
+    },
     handleAvatarSuccess (res, file) {
       this.imageUrl = URL.createObjectURL(file.raw)
     },
@@ -869,7 +1002,61 @@ export default {
       this.dialogImageUrl = file.url
       this.modifyDialog = true
     },
-    nextStep () {
+    nextStep1 (formName) {
+      this.$refs[formName].validateField('verCode', (valid) => {
+        console.log(valid)
+        if (valid === '') {
+          this.$message({
+            showClose: true,
+            message: '验证成功，请填写新密码',
+            type: 'success',
+            center: true
+          })
+          if (this.activeStep++ > 2) this.activeStep = 0
+        } else {
+          this.$message({
+            showClose: true,
+            message: '验证码错误，请输入正确的验证码',
+            type: 'error',
+            center: true
+          })
+        }
+      })
+    },
+    nextStep2 (formName) {
+      console.log(formName)
+      this.$refs[formName].validateField(['newPassword', 'newPassword2'], (valid) => {
+        const path = '/reset-pw'
+        const payload = {
+        //   phone: Number(this.codeForm.phone),
+          phone: 13823332664,
+          password: this.passwordForm.newPassword
+        }
+        this.$axios.post(path, payload)
+          .then((response) => {
+            this.$message({
+              showClose: true,
+              message: '密码修改成功',
+              type: 'success',
+              center: true
+            })
+            // 验证成功
+            if (this.activeStep++ > 2) this.activeStep = 0
+          })
+          .catch((error) => {
+            if (error) {
+              this.$message({
+                showClose: true,
+                message: '未知错误',
+                type: 'info',
+                duration: 5000,
+                center: true
+              })
+            }
+          })
+      })
+    },
+    nextStep3 () {
       if (this.activeStep++ > 2) this.activeStep = 0
     }
   },

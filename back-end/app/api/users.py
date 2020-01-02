@@ -130,7 +130,22 @@ def reset_password(token):
         return ClientTypeError()
     if 'password' not in data or not data.get('password', None).strip():
         return ParameterException()
-    user = User.verify_reset_password_jwt(token)
+    user = User.query.filter_by(phone=data.get('phone')).first()
+    if not user:
+        return ParameterException()
+    user.set_password(data.get('password'))
+    db.session.commit()
+    return Success()
+
+
+@bp.route('/reset-pw', methods=['POST'])
+def reset_pw():
+    '''用户点击邮件中的链接，通过验证 JWT 来重置对应的账户的密码'''
+    data = request.get_json()
+    if not data:
+        return ClientTypeError()
+    user = User.query.filter_by(phone=data.get('phone')).first()
+    print(data.get('phone'))
     if not user:
         return ParameterException()
     user.set_password(data.get('password'))

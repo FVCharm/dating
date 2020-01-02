@@ -39,7 +39,7 @@
                         <router-link
                           :underline="false"
                           tag="el-link"
-                          v-bind:to="{ name: 'ResetPasswordRequest' }"
+                          v-bind:to="{ name: 'ResetPassword' }"
                           type="primary"
                           >忘记密码？</router-link
                         >
