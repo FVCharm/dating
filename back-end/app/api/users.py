@@ -44,6 +44,7 @@ def get_users():
 def update_personal(id):
     """ 修改一个用户 """
     data = request.json
+    print(data)
     form = PersonalForm(data=data)
     user = User.query.get_or_404(id)
     form.validate_for_api()

@@ -880,6 +880,7 @@ export default {
       // eslint-disable-next-line camelcase
       const path = `/users/personal/${user_id}`
       const payload = {
+        working_place: this.personalForm.workPlace,
         username: this.personalForm.username,
         salary: this.personalForm.salary,
         degree: this.personalForm.degree,
