@@ -101,7 +101,7 @@ class User(Base):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-    def to_dict(self, include_phone=False):
+    def to_dict(self):
         data = {
             'id': self.id,
             'name': self.username,
@@ -128,8 +128,6 @@ class User(Base):
                 'religion': self.religion
             }
         }
-        if include_phone:
-            data['phone'] = self.phone
         return data
 
     @staticmethod

@@ -7,8 +7,7 @@ const BASE_URL = process.env.NODE_ENV === 'production' ? '/iview' : '/'
 module.exports = {
 	devServer: {
 		port: 2333,
-		open: true,
-		proxy: 'http://localhost:4000'
+		open: true
 	},
 	publicPath: BASE_URL,
 	chainWebpack: config => {

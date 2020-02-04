@@ -29,6 +29,7 @@ class ContactForm(BaseForm):
 
 
 class LivelyForm(BaseForm):
+
     marital_status = StringField()
     children = StringField()
     house = StringField()
